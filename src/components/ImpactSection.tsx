@@ -3,9 +3,9 @@ import { useInView } from "framer-motion";
 import { useRef, useEffect } from "react";
 
 const metrics = [
-  { value: 5000, suffix: "+", label: "Talent Connected" },
-  { value: 12, suffix: "", label: "Countries Reached" },
-  { value: 50, suffix: "M+", label: "Capital Deployed ($)" },
+  { value: 5000, suffix: "+", label: "Talents Trained" },
+  { value: 200, suffix: "", label: "Global Placements" },
+  { value: 15, suffix: "", label: "Countries Reached" },
   { value: 6, suffix: "", label: "Active Ventures" },
 ];
 
@@ -60,13 +60,13 @@ const ImpactSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-20"
         >
-          <span className="label-text text-accent-gold mb-4 block">Impact Metrics</span>
+          <span className="label-text text-accent-gold mb-4 block">Real Impact</span>
           <h2 className="text-display-lg font-display text-foreground mb-6">
-            Measurable <span className="gradient-text">Results</span>
+            Numbers That <span className="gradient-text">Matter</span>
           </h2>
           <p className="text-body-lg text-foreground-muted max-w-2xl mx-auto">
-            Numbers tell the story of impact. Every metric represents lives transformed, 
-            opportunities created, and bridges built across continents.
+            Quantifiable outcomes that demonstrate our commitment to creating lasting 
+            change across communities.
           </p>
         </motion.div>
 

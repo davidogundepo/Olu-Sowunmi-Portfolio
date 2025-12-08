@@ -37,13 +37,16 @@ const ContactSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="label-text text-accent-gold mb-4 block">Get in Touch</span>
+          <span className="label-text text-accent-gold mb-4 block">Let's Connect</span>
           <h2 className="text-display-lg font-display text-foreground mb-6">
-            Let's Build <span className="gradient-text">Together</span>
+            Start a <span className="gradient-text">Conversation</span>
           </h2>
           <p className="text-body-lg text-foreground-muted max-w-2xl mx-auto">
-            Ready to explore how we can collaborate? Whether it's a partnership opportunity, 
+            Ready to explore how we can work together? Whether it's a partnership opportunity, 
             speaking engagement, or just a conversation about Africa's potential—reach out.
+          </p>
+          <p className="text-foreground-muted mt-4 text-sm">
+            Usually responds within 24 hours
           </p>
         </motion.div>
 
@@ -65,7 +68,7 @@ const ContactSection = () => {
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
                   className="w-full px-4 py-3 bg-muted border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent-teal/50 focus:border-accent-teal transition-all"
-                  placeholder="John Doe"
+                  placeholder="Enter your full name"
                 />
               </div>
               <div>
@@ -78,7 +81,7 @@ const ContactSection = () => {
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
                   className="w-full px-4 py-3 bg-muted border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent-teal/50 focus:border-accent-teal transition-all"
-                  placeholder="john@example.com"
+                  placeholder="your@email.com"
                 />
               </div>
             </div>

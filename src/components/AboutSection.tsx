@@ -39,29 +39,27 @@ const AboutSection = () => {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.2 }}
           >
-            <span className="label-text text-accent-teal mb-4 block">About</span>
+            <span className="label-text text-accent-teal mb-4 block">Who is Olu</span>
             <h2 className="text-display-lg font-display text-foreground mb-6">
-              The <span className="gradient-text">Bridge-Builder</span>
+              A Life Committed to <span className="gradient-text">Building Others</span>
             </h2>
 
-            <div className="space-y-6 text-body-lg text-foreground-muted">
+            <div className="space-y-5 text-body-lg text-foreground-muted">
               <p>
-                Olu Sowunmi is a visionary entrepreneur and strategist dedicated to 
-                connecting African talent with global opportunities. With a career spanning 
-                IBM, JPMorgan, and multiple founder journeys, he brings a unique blend of 
-                corporate expertise and entrepreneurial spirit.
+                Olugbenga "Olu" Sowunmi is a builder of people and platforms. For over a decade 
+                he has helped organisations, professionals and communities move from good 
+                intentions to real outcomes.
               </p>
               <p>
-                His mission is simple yet profound: to transform good intentions into real 
-                outcomes. Through ventures like REDtech Africa and MOMMS, Olu has created 
-                sustainable pathways that enable thousands to access opportunities previously 
-                beyond reach.
+                Olu started his career in technology and consulting, working with organisations 
+                such as IBM and later JPMorganChase. At JPMorganChase he led global recruiting 
+                strategy, relationship management and inclusion focused initiatives. He was 
+                instrumental in creating BOLD Connect, an internal community that brought together 
+                Black professionals, allies and senior leaders for mentoring, sponsorship and 
+                career progression.
               </p>
-              <p>
-                A firm believer in the power of networks and collaboration, Olu works with 
-                governments, corporations, and institutions to build bridges that benefit all 
-                stakeholders—creating a model for inclusive economic development that others 
-                can replicate.
+              <p className="text-accent-gold italic font-medium">
+                "Impact isn't measured by what we build, but by who we build."
               </p>
             </div>
 

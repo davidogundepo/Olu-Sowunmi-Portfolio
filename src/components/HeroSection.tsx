@@ -3,7 +3,7 @@ import { ChevronDown } from "lucide-react";
 import oloImage from "@/assets/olu-1.jpg";
 
 const HeroSection = () => {
-  const words = ["From", "Good", "Intentions", "to", "Real", "Outcomes"];
+  const words = ["Systems.", "Support.", "Opportunity."];
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -29,7 +29,7 @@ const HeroSection = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="label-text text-accent-orange mb-8"
         >
-          Bridge-Builder • Entrepreneur • Visionary
+          Talent Leader • Entrepreneur • Trainer
         </motion.p>
 
         <h1 className="text-display-lg md:text-display-xl font-display font-bold text-foreground mb-8">
@@ -44,7 +44,7 @@ const HeroSection = () => {
                 ease: [0.25, 0.46, 0.45, 0.94],
               }}
               className={`inline-block mr-4 ${
-                word === "Real" || word === "Outcomes" ? "gradient-text" : ""
+                word === "Opportunity." ? "gradient-text" : ""
               }`}
             >
               {word}
@@ -55,17 +55,17 @@ const HeroSection = () => {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
+          transition={{ duration: 0.6, delay: 1.0 }}
           className="text-body-lg text-foreground-muted max-w-2xl mx-auto mb-12"
         >
-          Connecting African talent to global opportunities through strategic ventures, 
-          partnerships, and a relentless commitment to sustainable impact.
+          People rarely lack talent. They usually lack systems, support and opportunity. 
+          Everything I do flows from that belief.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.4 }}
+          transition={{ duration: 0.6, delay: 1.2 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <a href="#ventures" className="btn-gradient">
@@ -75,7 +75,7 @@ const HeroSection = () => {
             href="#contact"
             className="px-8 py-4 rounded-md border border-accent-teal text-accent-teal font-display font-semibold transition-all duration-300 hover:bg-accent-teal hover:text-background"
           >
-            Let's Connect
+            Let's Talk
           </a>
         </motion.div>
       </div>

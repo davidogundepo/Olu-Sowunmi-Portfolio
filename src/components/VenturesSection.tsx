@@ -15,6 +15,7 @@ const ventures = [
     ],
     icon: Globe,
     color: "orange",
+    url: "https://redtechafrica.com",
   },
   {
     name: "3PN",
@@ -27,6 +28,7 @@ const ventures = [
     ],
     icon: Users,
     color: "teal",
+    url: null,
   },
   {
     name: "MOMMS",
@@ -39,6 +41,7 @@ const ventures = [
     ],
     icon: Heart,
     color: "gold",
+    url: "https://momms.co.uk",
   },
 ];
 
@@ -59,41 +62,48 @@ const VentureCard = ({
     gold: "bg-accent-gold",
   }[venture.color];
 
+  const CardWrapper = venture.url ? 'a' : 'div';
+  const cardProps = venture.url ? { href: venture.url, target: "_blank", rel: "noopener noreferrer" } : {};
+
   return (
     <motion.div
       ref={ref}
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="gradient-border card-hover p-8 bg-card group cursor-pointer"
     >
-      <div className={`w-16 h-16 rounded-full ${iconColorClass} flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6`}>
-        <Icon className="w-8 h-8 text-background" />
-      </div>
+      <CardWrapper
+        {...cardProps}
+        className="gradient-border card-hover p-8 bg-card group cursor-pointer block h-full"
+      >
+        <div className={`w-16 h-16 rounded-full ${iconColorClass} flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6`}>
+          <Icon className="w-8 h-8 text-background" />
+        </div>
 
-      <h3 className="text-display-sm font-display text-foreground mb-2">
-        {venture.name}
-      </h3>
-      
-      <p className="text-accent-teal text-sm font-medium mb-4">{venture.role}</p>
+        <h3 className="text-display-sm font-display text-foreground mb-2">
+          {venture.name}
+        </h3>
+        
+        <p className="text-accent-teal text-sm font-medium mb-4">{venture.role}</p>
 
-      <p className="text-body text-foreground-muted mb-6">
-        {venture.description}
-      </p>
+        <p className="text-body text-foreground-muted mb-6">
+          {venture.description}
+        </p>
 
-      <ul className="space-y-2 mb-6">
-        {venture.offerings.map((offering, i) => (
-          <li key={i} className="text-sm text-foreground-muted flex items-start gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent-orange mt-2 flex-shrink-0" />
-            {offering}
-          </li>
-        ))}
-      </ul>
+        <ul className="space-y-2 mb-6">
+          {venture.offerings.map((offering, i) => (
+            <li key={i} className="text-sm text-foreground-muted flex items-start gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent-orange mt-2 flex-shrink-0" />
+              {offering}
+            </li>
+          ))}
+        </ul>
 
-      <div className="flex items-center gap-2 text-accent-orange font-display font-medium transition-all duration-300 group-hover:gap-4">
-        <span>Explore</span>
-        <ArrowRight className="w-5 h-5" />
-      </div>
+        <div className="flex items-center gap-2 text-accent-orange font-display font-medium transition-all duration-300 group-hover:gap-4">
+          <span>{venture.url ? "Visit Website" : "Explore"}</span>
+          <ArrowRight className="w-5 h-5" />
+        </div>
+      </CardWrapper>
     </motion.div>
   );
 };
@@ -130,6 +140,39 @@ const VenturesSection = () => {
             <VentureCard key={venture.name} venture={venture} index={index} />
           ))}
         </div>
+
+        {/* Additional ventures */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto"
+        >
+          <a 
+            href="https://chandossignatures.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="gradient-border p-6 bg-card group cursor-pointer flex items-center justify-between hover:scale-[1.02] transition-transform"
+          >
+            <div>
+              <h4 className="font-display font-semibold text-foreground">Chandos</h4>
+              <p className="text-sm text-foreground-muted">Real Estate & Development</p>
+            </div>
+            <ArrowRight className="w-5 h-5 text-accent-orange group-hover:translate-x-1 transition-transform" />
+          </a>
+          <a 
+            href="https://stratumgp.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="gradient-border p-6 bg-card group cursor-pointer flex items-center justify-between hover:scale-[1.02] transition-transform"
+          >
+            <div>
+              <h4 className="font-display font-semibold text-foreground">Stratum GP</h4>
+              <p className="text-sm text-foreground-muted">Investment Partnership</p>
+            </div>
+            <ArrowRight className="w-5 h-5 text-accent-orange group-hover:translate-x-1 transition-transform" />
+          </a>
+        </motion.div>
 
         {/* Additional note */}
         <motion.p

@@ -1,43 +1,43 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Globe, Package, Building, TrendingUp, Users, Recycle, ArrowRight } from "lucide-react";
+import { Globe, Heart, Users, ArrowRight } from "lucide-react";
 
 const ventures = [
   {
-    name: "REDtech Africa",
-    description: "Connecting African tech talent to global opportunities through training, placement, and community building.",
+    name: "REDtech Africa Consulting (RAC)",
+    role: "Co-Founder and CEO",
+    description: "RAC helps governments, donors, corporates and learning institutions turn trained talent into employed talent. The focus is on human capital development and last mile solutions such as skills assessments, hackathons, micro gigs and project-based work.",
+    offerings: [
+      "Large scale hackathons and innovation challenges",
+      "Last mile talent programmes for graduates",
+      "Advisory on skills-based hiring models"
+    ],
     icon: Globe,
     color: "orange",
   },
   {
-    name: "MOMMS",
-    description: "Revolutionary supply chain solutions addressing Africa's logistics challenges with technology-driven approaches.",
-    icon: Package,
-    color: "teal",
-  },
-  {
-    name: "Chandos",
-    description: "Strategic advisory and investment firm focused on high-growth opportunities across emerging markets.",
-    icon: Building,
-    color: "gold",
-  },
-  {
-    name: "Stratum GP",
-    description: "General partnership vehicle driving investments in transformative African businesses and infrastructure.",
-    icon: TrendingUp,
-    color: "orange",
-  },
-  {
     name: "3PN",
-    description: "Pan-African professional network fostering collaboration and knowledge exchange across borders.",
+    role: "Founder",
+    description: "3PN exists to help emerging and mid-career professionals design careers that fit their values and goals. Through events, small group programmes and practical tools.",
+    offerings: [
+      "Gain clarity on direction and strengths",
+      "Build personal brands and networks",
+      "Navigate career transitions and entrepreneurship"
+    ],
     icon: Users,
     color: "teal",
   },
   {
-    name: "Tucyclers",
-    description: "Sustainable waste management and recycling initiative promoting circular economy principles.",
-    icon: Recycle,
+    name: "MOMMS",
+    role: "Co-Founder",
+    description: "MOMMS is a mission driven platform that supports healthcare professionals and organisations, with a focus on empowering health, transforming communities and mobilising talent.",
+    offerings: [
+      "Connect healthcare workers to international opportunities",
+      "Support faith based and community providers",
+      "Strengthen health systems sustainably"
+    ],
+    icon: Heart,
     color: "gold",
   },
 ];
@@ -71,13 +71,24 @@ const VentureCard = ({
         <Icon className="w-8 h-8 text-background" />
       </div>
 
-      <h3 className="text-display-sm font-display text-foreground mb-4">
+      <h3 className="text-display-sm font-display text-foreground mb-2">
         {venture.name}
       </h3>
+      
+      <p className="text-accent-teal text-sm font-medium mb-4">{venture.role}</p>
 
-      <p className="text-body text-foreground-muted mb-6 line-clamp-3">
+      <p className="text-body text-foreground-muted mb-6">
         {venture.description}
       </p>
+
+      <ul className="space-y-2 mb-6">
+        {venture.offerings.map((offering, i) => (
+          <li key={i} className="text-sm text-foreground-muted flex items-start gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-orange mt-2 flex-shrink-0" />
+            {offering}
+          </li>
+        ))}
+      </ul>
 
       <div className="flex items-center gap-2 text-accent-orange font-display font-medium transition-all duration-300 group-hover:gap-4">
         <span>Explore</span>
@@ -106,11 +117,11 @@ const VenturesSection = () => {
         >
           <span className="label-text text-accent-teal mb-4 block">Ventures Hub</span>
           <h2 className="text-display-lg font-display text-foreground mb-6">
-            Building the <span className="gradient-text">Future</span>
+            Impact <span className="gradient-text">Portfolio</span>
           </h2>
           <p className="text-body-lg text-foreground-muted max-w-2xl mx-auto">
-            A portfolio of ventures united by a common mission: creating sustainable 
-            pathways for African talent and enterprise to thrive globally.
+            A diverse portfolio of ventures united by a common mission: creating sustainable 
+            impact across Africa and beyond.
           </p>
         </motion.div>
 
@@ -119,6 +130,17 @@ const VenturesSection = () => {
             <VentureCard key={venture.name} venture={venture} index={index} />
           ))}
         </div>
+
+        {/* Additional note */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="text-center text-foreground-muted mt-12 max-w-3xl mx-auto"
+        >
+          Beyond these core platforms, Olu also advises and invests in ventures across education, 
+          property, impact and consumer brands—always with an eye on sustainability and shared value.
+        </motion.p>
       </div>
     </section>
   );

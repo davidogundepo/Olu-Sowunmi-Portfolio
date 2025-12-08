@@ -15,25 +15,28 @@ const Footer = () => {
           <div className="md:col-span-2">
             <img src={logoWhite} alt="Olu Sowunmi" className="h-10 w-auto mb-6" />
             <p className="text-foreground-muted text-body max-w-md mb-6">
-              Bridge-builder between African talent and global opportunities. 
-              Transforming good intentions into real outcomes through strategic 
-              ventures and partnerships.
+              Builder of people and platforms. Helping organisations, professionals 
+              and communities move from good intentions to real outcomes.
             </p>
             <div className="flex items-center gap-4">
               <a
-                href="#"
+                href="mailto:hello@olusowunmi.com"
                 className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-foreground-muted hover:text-accent-orange hover:border-accent-orange transition-all"
               >
                 <Mail className="w-4 h-4" />
               </a>
               <a
-                href="#"
+                href="https://linkedin.com/in/olusowunmi"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-foreground-muted hover:text-accent-teal hover:border-accent-teal transition-all"
               >
                 <Linkedin className="w-4 h-4" />
               </a>
               <a
-                href="#"
+                href="https://twitter.com/olusowunmi"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-foreground-muted hover:text-accent-gold hover:border-accent-gold transition-all"
               >
                 <Twitter className="w-4 h-4" />
@@ -73,22 +76,42 @@ const Footer = () => {
             <h4 className="font-display font-semibold text-foreground mb-6">Ventures</h4>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-foreground-muted hover:text-accent-teal transition-colors">
+                <a 
+                  href="https://redtechafrica.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-foreground-muted hover:text-accent-teal transition-colors"
+                >
                   REDtech Africa
                 </a>
               </li>
               <li>
-                <a href="#" className="text-foreground-muted hover:text-accent-teal transition-colors">
+                <a 
+                  href="https://momms.co.uk" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-foreground-muted hover:text-accent-teal transition-colors"
+                >
                   MOMMS
                 </a>
               </li>
               <li>
-                <a href="#" className="text-foreground-muted hover:text-accent-teal transition-colors">
+                <a 
+                  href="https://chandossignatures.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-foreground-muted hover:text-accent-teal transition-colors"
+                >
                   Chandos
                 </a>
               </li>
               <li>
-                <a href="#" className="text-foreground-muted hover:text-accent-teal transition-colors">
+                <a 
+                  href="https://stratumgp.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-foreground-muted hover:text-accent-teal transition-colors"
+                >
                   Stratum GP
                 </a>
               </li>

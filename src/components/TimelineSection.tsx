@@ -1,38 +1,44 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Briefcase, Building2, Rocket, Users, Star } from "lucide-react";
+import { Briefcase, Building2, Rocket, Users, Heart, Star } from "lucide-react";
 
 const milestones = [
   {
-    year: "2015",
-    title: "IBM",
-    description: "Began career at IBM, developing expertise in enterprise technology and global operations.",
-    icon: Building2,
-  },
-  {
-    year: "2017",
-    title: "JPMorgan BOLD",
-    description: "Selected for JPMorgan's prestigious BOLD program, gaining insights into global finance.",
+    year: "Early Career",
+    title: "VIPCG, Tribal, G4S, RSG",
+    description: "Built foundational expertise in technology, consulting and talent strategy across multiple organisations.",
     icon: Briefcase,
   },
   {
+    year: "IBM",
+    title: "Technology & Consulting",
+    description: "Developed expertise in enterprise technology and global operations, working with organisations on digital transformation.",
+    icon: Building2,
+  },
+  {
+    year: "JPMorganChase",
+    title: "Global Talent Leader",
+    description: "Led global recruiting strategy, relationship management and inclusion focused initiatives. Instrumental in creating BOLD Connect—an internal community for Black professionals, allies and senior leaders.",
+    icon: Star,
+  },
+  {
     year: "2019",
-    title: "REDtech Africa",
-    description: "Founded REDtech Africa to bridge the gap between African talent and global tech opportunities.",
+    title: "REDtech Africa Consulting",
+    description: "Co-founded RAC to help governments, donors and corporates turn trained talent into employed talent through human capital development.",
     icon: Rocket,
   },
   {
     year: "2021",
-    title: "MOMMS",
-    description: "Launched MOMMS to address critical supply chain challenges across the continent.",
+    title: "3PN & MOMMS",
+    description: "Founded 3PN to help professionals design meaningful careers. Co-founded MOMMS to support healthcare professionals and transform communities.",
     icon: Users,
   },
   {
     year: "Present",
     title: "Building Bridges",
-    description: "Expanding ventures portfolio and deepening impact across Africa and beyond.",
-    icon: Star,
+    description: "Advising and investing in ventures across education, property, impact and consumer brands—always with an eye on sustainability and shared value.",
+    icon: Heart,
   },
 ];
 
@@ -96,8 +102,8 @@ const TimelineSection = () => {
             A Path of <span className="gradient-text">Purpose</span>
           </h2>
           <p className="text-body-lg text-foreground-muted max-w-2xl mx-auto">
-            From corporate corridors to entrepreneurial frontiers, every step has been 
-            guided by a singular vision: unlocking Africa's potential.
+            From corporate corridors to entrepreneurial frontiers, Olu brings a mix of 
+            corporate discipline, entrepreneurial creativity and community heart.
           </p>
         </motion.div>
 

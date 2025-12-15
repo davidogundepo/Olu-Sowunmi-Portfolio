@@ -6,7 +6,7 @@ const HeroSection = () => {
   const words = ["Systems.", "Support.", "Opportunity."];
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-safe-top">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
         <img
@@ -27,7 +27,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="label-text text-accent-orange mb-8"
+          className="label-text text-accent-orange mb-8 mt-24 md:mt-0"
         >
           Talent Leader • Entrepreneur • Trainer
         </motion.p>

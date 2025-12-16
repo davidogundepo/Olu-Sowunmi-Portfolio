@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { motion, useMotionValue, animate } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { Users, Building, Globe, Briefcase } from "lucide-react";
@@ -41,7 +41,7 @@ const AnimatedCounter = ({
   }, [isInView, value, count]);
 
   return (
-    <span className="text-display-xl font-display gradient-text">
+    <span className="font-display gradient-text whitespace-nowrap text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
       {displayValue.toLocaleString()}
       {suffix}
     </span>
@@ -67,7 +67,7 @@ const ImpactSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          className="text-center mb-16 md:mb-20"
         >
           <span className="label-text text-accent-orange mb-4 block">Real Impact</span>
           <h2 className="text-display-lg font-display text-foreground mb-6">
@@ -79,7 +79,7 @@ const ImpactSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
           {metrics.map((metric, index) => {
             const Icon = metric.icon;
             return (
@@ -88,19 +88,19 @@ const ImpactSection = () => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={isInView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="gradient-border bg-card p-6 md:p-8 text-center"
+                className="gradient-border bg-card p-4 sm:p-5 md:p-6 lg:p-8 text-center flex flex-col items-center justify-center min-h-[140px] sm:min-h-[160px] md:min-h-[180px]"
               >
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-accent-orange/20 flex items-center justify-center mx-auto mb-4">
-                  <Icon className="w-6 h-6 md:w-7 md:h-7 text-accent-orange" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-accent-orange/20 flex items-center justify-center mb-3 md:mb-4">
+                  <Icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-accent-orange" />
                 </div>
-                <div className="mb-2">
+                <div className="mb-2 overflow-hidden">
                   <AnimatedCounter
                     value={metric.value}
                     suffix={metric.suffix}
                     isInView={isInView}
                   />
                 </div>
-                <p className="label-text text-foreground-muted uppercase tracking-wider text-xs md:text-sm">{metric.label}</p>
+                <p className="label-text text-foreground-muted uppercase tracking-wider text-[10px] sm:text-xs md:text-sm leading-tight">{metric.label}</p>
               </motion.div>
             );
           })}

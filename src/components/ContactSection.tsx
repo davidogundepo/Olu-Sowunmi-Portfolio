@@ -1,15 +1,32 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Send, ChevronLeft, ChevronRight } from "lucide-react";
+import { Send, ChevronLeft, ChevronRight, Clock, Check, Calendar as CalendarIcon } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { Calendar } from "@/components/ui/calendar";
 import oluImage2 from "@/assets/olu-2.jpg";
+
+const timeSlots = [
+  { duration: 30, label: "30 min", description: "Quick intro call" },
+  { duration: 45, label: "45 min", description: "Discovery session" },
+  { duration: 60, label: "1 hour", description: "Deep dive consultation" },
+];
+
+const availableTimes = [
+  "9:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "2:00 PM",
+  "3:00 PM",
+  "4:00 PM",
+];
 
 const ContactSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [date, setDate] = useState<Date | undefined>(undefined);
+  const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [step, setStep] = useState<'date' | 'duration' | 'time' | 'form'>('date');
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,22 +34,170 @@ const ContactSection = () => {
     message: "",
   });
 
-  // Mock available dates (in real implementation, this would come from a calendar API)
+  // Generate calendar data
+  const [currentMonth, setCurrentMonth] = useState(new Date(2026, 0, 1)); // January 2026
   const availableDates = [2, 4, 5, 9, 11, 12, 16, 18, 19, 23, 24, 26];
   
-  const isDateAvailable = (date: Date) => {
-    return availableDates.includes(date.getDate());
+  const getDaysInMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  };
+
+  const isDateAvailable = (day: number) => {
+    return availableDates.includes(day);
+  };
+
+  const handleDateSelect = (day: number) => {
+    if (isDateAvailable(day)) {
+      setDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day));
+      setStep('duration');
+    }
+  };
+
+  const handleDurationSelect = (duration: number) => {
+    setSelectedDuration(duration);
+    setStep('time');
+  };
+
+  const handleTimeSelect = (time: string) => {
+    setSelectedTime(time);
+    setStep('form');
+  };
+
+  const handleBack = () => {
+    if (step === 'duration') {
+      setStep('date');
+      setDate(undefined);
+    } else if (step === 'time') {
+      setStep('duration');
+      setSelectedDuration(null);
+    } else if (step === 'form') {
+      setStep('time');
+      setSelectedTime(null);
+    }
+  };
+
+  const prevMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
+  };
+
+  const nextMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const dateStr = date ? date.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'No date selected';
+    const dateStr = date ? date.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : '';
+    const durationSlot = timeSlots.find(t => t.duration === selectedDuration);
     toast({
       title: "Meeting Request Sent!",
-      description: `Thank you for reaching out. Olu will confirm your meeting for ${dateStr} soon.`,
+      description: `Thank you! Olu will confirm your ${durationSlot?.label} meeting on ${dateStr} at ${selectedTime}.`,
     });
     setFormData({ name: "", email: "", organization: "", message: "" });
     setDate(undefined);
+    setSelectedDuration(null);
+    setSelectedTime(null);
+    setStep('date');
+  };
+
+  const renderCalendar = () => {
+    const daysInMonth = getDaysInMonth(currentMonth);
+    const firstDay = getFirstDayOfMonth(currentMonth);
+    const days = [];
+    const dayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    
+    // Previous month days
+    const prevMonthDays = getDaysInMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
+    for (let i = firstDay - 1; i >= 0; i--) {
+      days.push(
+        <div key={`prev-${i}`} className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-foreground-muted/30 text-lg">
+          {prevMonthDays - i}
+        </div>
+      );
+    }
+    
+    // Current month days
+    for (let day = 1; day <= daysInMonth; day++) {
+      const available = isDateAvailable(day);
+      const isSelected = date?.getDate() === day && date?.getMonth() === currentMonth.getMonth();
+      
+      days.push(
+        <motion.button
+          key={day}
+          type="button"
+          whileHover={available ? { scale: 1.1 } : {}}
+          whileTap={available ? { scale: 0.95 } : {}}
+          onClick={() => handleDateSelect(day)}
+          disabled={!available}
+          className={`
+            w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center text-lg font-medium transition-all duration-200
+            ${available 
+              ? isSelected 
+                ? 'bg-accent-teal text-background shadow-lg shadow-accent-teal/30' 
+                : 'bg-accent-teal/20 text-foreground hover:bg-accent-teal/40 cursor-pointer'
+              : 'text-foreground-muted/40 cursor-not-allowed'}
+          `}
+        >
+          {day}
+        </motion.button>
+      );
+    }
+    
+    // Next month days
+    const remainingDays = 42 - days.length;
+    for (let i = 1; i <= remainingDays; i++) {
+      days.push(
+        <div key={`next-${i}`} className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-foreground-muted/30 text-lg">
+          {i}
+        </div>
+      );
+    }
+
+    return (
+      <div className="w-full">
+        {/* Month Navigation */}
+        <div className="flex items-center justify-between mb-6">
+          <motion.button
+            type="button"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={prevMonth}
+            className="w-10 h-10 rounded-lg bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5 text-foreground" />
+          </motion.button>
+          <h3 className="text-xl sm:text-2xl font-display font-semibold text-foreground">
+            {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+          </h3>
+          <motion.button
+            type="button"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={nextMonth}
+            className="w-10 h-10 rounded-lg bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors"
+          >
+            <ChevronRight className="w-5 h-5 text-foreground" />
+          </motion.button>
+        </div>
+
+        {/* Day Names */}
+        <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2">
+          {dayNames.map(day => (
+            <div key={day} className="w-12 h-10 sm:w-14 flex items-center justify-center text-foreground-muted font-medium text-sm sm:text-base">
+              {day}
+            </div>
+          ))}
+        </div>
+
+        {/* Days Grid */}
+        <div className="grid grid-cols-7 gap-1 sm:gap-2">
+          {days}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -65,133 +230,270 @@ const ContactSection = () => {
           className="grid grid-cols-1 lg:grid-cols-2 gap-8"
         >
           {/* Calendar Section */}
-          <div className="gradient-border bg-card p-6 md:p-8">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={setDate}
-              className="rounded-md w-full pointer-events-auto"
-              classNames={{
-                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-                month: "space-y-4 w-full",
-                caption: "flex justify-center pt-1 relative items-center",
-                caption_label: "text-lg font-display font-semibold text-foreground",
-                nav: "space-x-1 flex items-center",
-                nav_button: "h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 border border-border rounded-md flex items-center justify-center hover:bg-muted transition-colors",
-                nav_button_previous: "absolute left-1",
-                nav_button_next: "absolute right-1",
-                table: "w-full border-collapse space-y-1",
-                head_row: "flex w-full",
-                head_cell: "text-foreground-muted rounded-md w-full font-normal text-sm",
-                row: "flex w-full mt-2",
-                cell: "h-10 w-full text-center text-sm p-0 relative focus-within:relative focus-within:z-20",
-                day: "h-10 w-10 p-0 font-normal mx-auto rounded-md hover:bg-muted transition-colors flex items-center justify-center",
-                day_range_end: "day-range-end",
-                day_selected: "bg-accent-teal text-background hover:bg-accent-teal hover:text-background focus:bg-accent-teal focus:text-background",
-                day_today: "bg-muted text-foreground",
-                day_outside: "day-outside text-muted-foreground opacity-50",
-                day_disabled: "text-muted-foreground opacity-50",
-                day_range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground",
-                day_hidden: "invisible",
-              }}
-              modifiers={{
-                available: (date) => isDateAvailable(date),
-              }}
-              modifiersStyles={{
-                available: {
-                  backgroundColor: 'hsl(var(--accent-teal) / 0.2)',
-                  borderRadius: '6px',
-                },
-              }}
-              disabled={(date) => date < new Date() || !isDateAvailable(date)}
-              components={{
-                IconLeft: () => <ChevronLeft className="h-4 w-4" />,
-                IconRight: () => <ChevronRight className="h-4 w-4" />,
-              }}
-            />
-            {date && (
-              <p className="mt-4 text-sm text-accent-teal text-center">
-                Selected: {date.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-              </p>
-            )}
+          <div className="relative rounded-2xl p-[2px] bg-gradient-to-br from-accent-orange via-accent-orange/50 to-accent-teal">
+            <div className="bg-card rounded-2xl p-6 sm:p-8 min-h-[500px]">
+              <AnimatePresence mode="wait">
+                {step === 'date' && (
+                  <motion.div
+                    key="calendar"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {renderCalendar()}
+                  </motion.div>
+                )}
+
+                {step === 'duration' && (
+                  <motion.div
+                    key="duration"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="h-full"
+                  >
+                    <button
+                      type="button"
+                      onClick={handleBack}
+                      className="flex items-center gap-2 text-foreground-muted hover:text-foreground mb-6 transition-colors"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      <span>Back to calendar</span>
+                    </button>
+
+                    <div className="text-center mb-8">
+                      <CalendarIcon className="w-12 h-12 text-accent-teal mx-auto mb-4" />
+                      <p className="text-lg text-foreground font-medium">
+                        {date?.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                      </p>
+                    </div>
+
+                    <h4 className="text-xl font-display font-semibold text-foreground mb-6 text-center">
+                      Select Duration
+                    </h4>
+
+                    <div className="space-y-4">
+                      {timeSlots.map((slot, index) => (
+                        <motion.button
+                          key={slot.duration}
+                          type="button"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          whileHover={{ scale: 1.02, x: 8 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => handleDurationSelect(slot.duration)}
+                          className={`
+                            w-full p-5 rounded-xl border-2 border-border bg-muted/50 hover:border-accent-teal hover:bg-accent-teal/10
+                            flex items-center gap-4 transition-all duration-200 group
+                          `}
+                        >
+                          <div className="w-12 h-12 rounded-full bg-accent-teal/20 flex items-center justify-center group-hover:bg-accent-teal/30 transition-colors">
+                            <Clock className="w-6 h-6 text-accent-teal" />
+                          </div>
+                          <div className="text-left flex-1">
+                            <p className="text-lg font-semibold text-foreground">{slot.label}</p>
+                            <p className="text-sm text-foreground-muted">{slot.description}</p>
+                          </div>
+                          <ChevronRight className="w-5 h-5 text-foreground-muted group-hover:text-accent-teal transition-colors" />
+                        </motion.button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {step === 'time' && (
+                  <motion.div
+                    key="time"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <button
+                      type="button"
+                      onClick={handleBack}
+                      className="flex items-center gap-2 text-foreground-muted hover:text-foreground mb-6 transition-colors"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      <span>Back to duration</span>
+                    </button>
+
+                    <div className="text-center mb-8">
+                      <div className="inline-flex items-center gap-3 bg-accent-teal/10 px-4 py-2 rounded-full mb-4">
+                        <CalendarIcon className="w-5 h-5 text-accent-teal" />
+                        <span className="text-foreground font-medium">
+                          {date?.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}
+                        </span>
+                        <span className="text-foreground-muted">•</span>
+                        <Clock className="w-5 h-5 text-accent-teal" />
+                        <span className="text-foreground font-medium">{selectedDuration} min</span>
+                      </div>
+                    </div>
+
+                    <h4 className="text-xl font-display font-semibold text-foreground mb-6 text-center">
+                      Select Time
+                    </h4>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      {availableTimes.map((time, index) => (
+                        <motion.button
+                          key={time}
+                          type="button"
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: index * 0.05 }}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => handleTimeSelect(time)}
+                          className="p-4 rounded-xl border-2 border-border bg-muted/50 hover:border-accent-teal hover:bg-accent-teal/10 transition-all duration-200"
+                        >
+                          <span className="text-lg font-semibold text-foreground">{time}</span>
+                        </motion.button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {step === 'form' && (
+                  <motion.div
+                    key="confirmed"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className="text-center"
+                  >
+                    <button
+                      type="button"
+                      onClick={handleBack}
+                      className="flex items-center gap-2 text-foreground-muted hover:text-foreground mb-6 transition-colors"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      <span>Back to time</span>
+                    </button>
+
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                      className="w-20 h-20 rounded-full bg-gradient-to-br from-accent-orange to-accent-teal flex items-center justify-center mx-auto mb-6"
+                    >
+                      <Check className="w-10 h-10 text-background" />
+                    </motion.div>
+
+                    <h4 className="text-2xl font-display font-semibold text-foreground mb-4">
+                      Meeting Selected!
+                    </h4>
+
+                    <div className="bg-muted/50 rounded-xl p-6 mb-6 space-y-3">
+                      <div className="flex items-center justify-center gap-3">
+                        <CalendarIcon className="w-5 h-5 text-accent-teal" />
+                        <span className="text-foreground font-medium">
+                          {date?.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-center gap-3">
+                        <Clock className="w-5 h-5 text-accent-teal" />
+                        <span className="text-foreground font-medium">
+                          {selectedTime} • {selectedDuration} minutes
+                        </span>
+                      </div>
+                    </div>
+
+                    <p className="text-foreground-muted text-sm">
+                      Complete the form to confirm your booking →
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
           {/* Form Section */}
-          <div className="gradient-border bg-card p-6 md:p-8">
-            {/* Profile Header */}
-            <div className="flex items-center gap-4 mb-6 pb-6 border-b border-border">
-              <img
-                src={oluImage2}
-                alt="Olu Sowunmi"
-                className="w-14 h-14 rounded-full object-cover"
-              />
-              <div>
-                <h3 className="font-display font-semibold text-foreground">Olu Sowunmi</h3>
-                <p className="text-sm text-foreground-muted">Usually responds within 24 hours</p>
+          <div className="relative rounded-2xl p-[2px] bg-gradient-to-br from-accent-teal via-accent-teal/50 to-accent-orange">
+            <div className="bg-card rounded-2xl p-6 sm:p-8 h-full">
+              {/* Profile Header */}
+              <div className="flex items-center gap-4 mb-6 pb-6 border-b border-border">
+                <img
+                  src={oluImage2}
+                  alt="Olu Sowunmi"
+                  className="w-14 h-14 rounded-full object-cover"
+                />
+                <div>
+                  <h3 className="font-display font-semibold text-foreground">Olu Sowunmi</h3>
+                  <p className="text-sm text-foreground-muted">Usually responds within 24 hours</p>
+                </div>
               </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="label-text text-foreground-muted mb-2 block text-xs uppercase tracking-wider">
+                    Your Name
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                    className="w-full px-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent-teal/50 focus:border-accent-teal transition-all"
+                    placeholder="Enter your full name"
+                  />
+                </div>
+                
+                <div>
+                  <label className="label-text text-foreground-muted mb-2 block text-xs uppercase tracking-wider">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    className="w-full px-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent-teal/50 focus:border-accent-teal transition-all"
+                    placeholder="your@email.com"
+                  />
+                </div>
+
+                <div>
+                  <label className="label-text text-foreground-muted mb-2 block text-xs uppercase tracking-wider">
+                    Organization
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.organization}
+                    onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                    className="w-full px-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent-teal/50 focus:border-accent-teal transition-all"
+                    placeholder="Your Company or Institution"
+                  />
+                </div>
+
+                <div>
+                  <label className="label-text text-foreground-muted mb-2 block text-xs uppercase tracking-wider">
+                    Message
+                  </label>
+                  <textarea
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    required
+                    rows={3}
+                    className="w-full px-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent-teal/50 focus:border-accent-teal transition-all resize-none"
+                    placeholder="Tell me about your partnership idea or project..."
+                  />
+                </div>
+
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="btn-gradient w-full flex items-center justify-center gap-3"
+                >
+                  <span>{step === 'form' ? 'Confirm Booking' : 'Send Message'}</span>
+                  <Send className="w-5 h-5" />
+                </motion.button>
+              </form>
             </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="label-text text-foreground-muted mb-2 block text-xs uppercase tracking-wider">
-                  Your Name
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                  className="w-full px-4 py-3 bg-muted border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent-teal/50 focus:border-accent-teal transition-all"
-                  placeholder="Enter your full name"
-                />
-              </div>
-              
-              <div>
-                <label className="label-text text-foreground-muted mb-2 block text-xs uppercase tracking-wider">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                  className="w-full px-4 py-3 bg-muted border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent-teal/50 focus:border-accent-teal transition-all"
-                  placeholder="your@email.com"
-                />
-              </div>
-
-              <div>
-                <label className="label-text text-foreground-muted mb-2 block text-xs uppercase tracking-wider">
-                  Organization
-                </label>
-                <input
-                  type="text"
-                  value={formData.organization}
-                  onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
-                  className="w-full px-4 py-3 bg-muted border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent-teal/50 focus:border-accent-teal transition-all"
-                  placeholder="Your Company or Institution"
-                />
-              </div>
-
-              <div>
-                <label className="label-text text-foreground-muted mb-2 block text-xs uppercase tracking-wider">
-                  Message
-                </label>
-                <textarea
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  required
-                  rows={3}
-                  className="w-full px-4 py-3 bg-muted border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent-teal/50 focus:border-accent-teal transition-all resize-none"
-                  placeholder="Tell me about your partnership idea or project..."
-                />
-              </div>
-
-              <button type="submit" className="btn-gradient w-full flex items-center justify-center gap-3">
-                <span>Send Message</span>
-                <Send className="w-5 h-5" />
-              </button>
-            </form>
           </div>
         </motion.div>
       </div>

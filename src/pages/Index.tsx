@@ -1,11 +1,12 @@
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
-import TimelineSection from "@/components/TimelineSection";
+import AboutSection from "@/components/AboutSection";
 import VenturesSection from "@/components/VenturesSection";
 import ImpactSection from "@/components/ImpactSection";
-import AboutSection from "@/components/AboutSection";
+import ExpertiseSection from "@/components/ExpertiseSection";
 import ValuesSection from "@/components/ValuesSection";
-import CollaborationSection from "@/components/CollaborationSection";
+import HowWeWorkSection from "@/components/HowWeWorkSection";
+import WorkWithOluSection from "@/components/WorkWithOluSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
@@ -14,12 +15,13 @@ const Index = () => {
     <main className="bg-background min-h-screen">
       <Navigation />
       <HeroSection />
-      <TimelineSection />
-      <VenturesSection />
-      <ImpactSection />
       <AboutSection />
+      <ImpactSection />
+      <VenturesSection />
+      <ExpertiseSection />
       <ValuesSection />
-      <CollaborationSection />
+      <HowWeWorkSection />
+      <WorkWithOluSection />
       <ContactSection />
       <Footer />
     </main>

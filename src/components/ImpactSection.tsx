@@ -1,12 +1,13 @@
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import { Users, Building, Globe, Briefcase } from "lucide-react";
 
 const metrics = [
-  { value: 5000, suffix: "+", label: "Talents Trained" },
-  { value: 200, suffix: "", label: "Global Placements" },
-  { value: 15, suffix: "", label: "Countries Reached" },
-  { value: 6, suffix: "", label: "Active Ventures" },
+  { value: 5000, suffix: "+", label: "Talents Trained", icon: Users },
+  { value: 200, suffix: "+", label: "Global Placements", icon: Building },
+  { value: 15, suffix: "", label: "Countries Reached", icon: Globe },
+  { value: 6, suffix: "", label: "Active Ventures", icon: Briefcase },
 ];
 
 const AnimatedCounter = ({
@@ -18,24 +19,32 @@ const AnimatedCounter = ({
   suffix: string;
   isInView: boolean;
 }) => {
+  const [displayValue, setDisplayValue] = useState(0);
   const count = useMotionValue(0);
-  const rounded = useTransform(count, (latest) => Math.round(latest));
 
   useEffect(() => {
     if (isInView) {
+      const unsubscribe = count.on("change", (latest) => {
+        setDisplayValue(Math.round(latest));
+      });
+      
       const animation = animate(count, value, {
         duration: 2,
         ease: "easeOut",
       });
-      return animation.stop;
+      
+      return () => {
+        unsubscribe();
+        animation.stop();
+      };
     }
   }, [isInView, value, count]);
 
   return (
-    <motion.span className="text-display-xl font-display gradient-text">
-      {rounded.get()}
+    <span className="text-display-xl font-display gradient-text">
+      {displayValue.toLocaleString()}
       {suffix}
-    </motion.span>
+    </span>
   );
 };
 
@@ -44,7 +53,7 @@ const ImpactSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section className="section-padding bg-background relative overflow-hidden">
+    <section className="section-padding bg-background-secondary relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 grid-pattern opacity-20" />
 
@@ -60,7 +69,7 @@ const ImpactSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-20"
         >
-          <span className="label-text text-accent-gold mb-4 block">Real Impact</span>
+          <span className="label-text text-accent-orange mb-4 block">Real Impact</span>
           <h2 className="text-display-lg font-display text-foreground mb-6">
             Numbers That <span className="gradient-text">Matter</span>
           </h2>
@@ -70,29 +79,31 @@ const ImpactSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
-          {metrics.map((metric, index) => (
-            <motion.div
-              key={metric.label}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="text-center"
-            >
-              <div className="mb-4">
-                <span className="text-display-xl font-display gradient-text">
-                  {isInView && (
-                    <AnimatedCounter
-                      value={metric.value}
-                      suffix={metric.suffix}
-                      isInView={isInView}
-                    />
-                  )}
-                </span>
-              </div>
-              <p className="label-text text-foreground-muted">{metric.label}</p>
-            </motion.div>
-          ))}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          {metrics.map((metric, index) => {
+            const Icon = metric.icon;
+            return (
+              <motion.div
+                key={metric.label}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="gradient-border bg-card p-6 md:p-8 text-center"
+              >
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-accent-orange/20 flex items-center justify-center mx-auto mb-4">
+                  <Icon className="w-6 h-6 md:w-7 md:h-7 text-accent-orange" />
+                </div>
+                <div className="mb-2">
+                  <AnimatedCounter
+                    value={metric.value}
+                    suffix={metric.suffix}
+                    isInView={isInView}
+                  />
+                </div>
+                <p className="label-text text-foreground-muted uppercase tracking-wider text-xs md:text-sm">{metric.label}</p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

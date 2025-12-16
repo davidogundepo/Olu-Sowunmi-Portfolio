@@ -7,7 +7,7 @@ const ventures = [
   {
     name: "REDtech Africa Consulting (RAC)",
     role: "Co-Founder and CEO",
-    description: "RAC helps governments, donors, corporates and learning institutions turn trained talent into employed talent. The focus is on human capital development and last mile solutions such as skills assessments, hackathons, micro gigs and project-based work.",
+    description: "RAC helps governments, donors, corporates and learning institutions turn trained talent into employed talent. The focus is on human capital development and last mile solutions such as skills assessments, hackathons, micro gigs and project-based work that give emerging talent real experience and give employers trusted pipelines.",
     offerings: [
       "Large scale hackathons and innovation challenges",
       "Last mile talent programmes for graduates",
@@ -31,9 +31,9 @@ const ventures = [
     url: null,
   },
   {
-    name: "MOMMS",
+    name: "MOMMS (Ministry of Medical Missions)",
     role: "Co-Founder",
-    description: "MOMMS is a mission driven platform that supports healthcare professionals and organisations, with a focus on empowering health, transforming communities and mobilising talent.",
+    description: "MOMMS is a mission driven platform that supports healthcare professionals and organisations, with a focus on empowering health, transforming communities and mobilising talent. Through MOMMS, Olu and his Co-Founder Dr Anne connect healthcare workers to international opportunities.",
     offerings: [
       "Connect healthcare workers to international opportunities",
       "Support faith based and community providers",

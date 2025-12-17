@@ -6,16 +6,16 @@
 
 @layer base {
   :root {
-    /* Olu Sowunmi Brand Colors */
-    --background: 222 47% 7%;
-    --background-secondary: 228 24% 13%;
-    --foreground: 228 17% 92%;
-    --foreground-muted: 228 10% 70%;
+    /* Olu Sowunmi Brand Colors - Accessibility Improved */
+    --background: 220 25% 10%;
+    --background-secondary: 220 20% 15%;
+    --foreground: 210 20% 95%;
+    --foreground-muted: 210 15% 70%;
     
-    /* Brand Accents */
-    --accent-orange: 16 100% 60%;
-    --accent-teal: 189 100% 50%;
-    --accent-gold: 45 100% 51%;
+    /* Brand Accents - Color-blind friendly (higher contrast, distinguishable) */
+    --accent-orange: 25 95% 55%;
+    --accent-teal: 200 85% 45%;
+    --accent-gold: 40 90% 50%;
     
     --card: 228 24% 13%;
     --card-foreground: 228 17% 92%;

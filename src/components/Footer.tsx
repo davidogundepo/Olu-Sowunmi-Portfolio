@@ -13,7 +13,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="md:col-span-2">
-            <img src={logoWhite} alt="Olu Sowunmi" className="h-10 w-auto mb-6" />
+            <img src={logoWhite} alt="Olu Sowunmi" className="h-14 w-auto mb-6" />
             <p className="text-foreground-muted text-body max-w-md mb-6">
               Builder of people and platforms. Helping organisations, professionals 
               and communities move from good intentions to real outcomes.
@@ -49,8 +49,8 @@ const Footer = () => {
             <h4 className="font-display font-semibold text-foreground mb-6">Explore</h4>
             <ul className="space-y-3">
               <li>
-                <a href="#journey" className="text-foreground-muted hover:text-accent-orange transition-colors">
-                  Journey
+                <a href="#about" className="text-foreground-muted hover:text-accent-orange transition-colors">
+                  About
                 </a>
               </li>
               <li>
@@ -59,13 +59,13 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#about" className="text-foreground-muted hover:text-accent-orange transition-colors">
-                  About
+                <a href="#values" className="text-foreground-muted hover:text-accent-orange transition-colors">
+                  Core Values
                 </a>
               </li>
               <li>
-                <a href="#collaborate" className="text-foreground-muted hover:text-accent-orange transition-colors">
-                  Collaborate
+                <a href="#contact" className="text-foreground-muted hover:text-accent-orange transition-colors">
+                  Contact
                 </a>
               </li>
             </ul>

@@ -7,11 +7,9 @@ const workAreas = [
     number: "1",
     title: "Strategy & Design",
     items: [
-      "Talent strategy audits",
       "Workforce planning",
       "Learning program design",
-      "Employer branding",
-      "DEI frameworks"
+      "Employer branding"
     ],
     color: "orange",
   },
@@ -20,9 +18,7 @@ const workAreas = [
     title: "Delivery",
     items: [
       "Executive search",
-      "Recruitment process outsourcing",
       "Training delivery",
-      "Assessment centers",
       "Onboarding systems"
     ],
     color: "teal",
@@ -32,9 +28,7 @@ const workAreas = [
     title: "Speaking",
     items: [
       "Keynotes & panels",
-      "Workshop facilitation",
       "Leadership retreats",
-      "Podcast appearances",
       "Conference hosting"
     ],
     color: "gold",

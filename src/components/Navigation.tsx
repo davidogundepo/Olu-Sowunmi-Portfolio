@@ -4,10 +4,9 @@ import { Menu, X } from "lucide-react";
 import logoWhite from "@/assets/logo-white.png";
 
 const navLinks = [
-  { label: "Journey", href: "#journey" },
-  { label: "Ventures", href: "#ventures" },
   { label: "About", href: "#about" },
-  { label: "Collaborate", href: "#collaborate" },
+  { label: "Ventures", href: "#ventures" },
+  { label: "Core Values", href: "#values" },
 ];
 
 const Navigation = () => {
@@ -36,7 +35,7 @@ const Navigation = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <a href="#" className="relative z-10">
-              <img src={logoWhite} alt="Olu Sowunmi" className="h-10 w-auto" />
+              <img src={logoWhite} alt="Olu Sowunmi" className="h-14 w-auto" />
             </a>
 
             {/* Desktop Navigation */}
@@ -96,7 +95,7 @@ const Navigation = () => {
                 onClick={() => setIsMobileMenuOpen(false)}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
+                transition={{ delay: 0.4 }}
                 className="btn-gradient mt-4"
               >
                 <span>Get in Touch</span>

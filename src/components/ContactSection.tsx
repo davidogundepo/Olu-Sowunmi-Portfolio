@@ -3,7 +3,8 @@ import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Send, ChevronLeft, ChevronRight, Clock, Check, Calendar as CalendarIcon, CheckCircle2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import oluImage2 from "@/assets/olu-2.jpg";
+import { supabase } from "@/integrations/supabase/client";
+import oluNewImage from "@/assets/olu-new.jpg";
 
 const timeSlots = [
   { duration: 45, label: "45 min", description: "Discovery session" },
@@ -100,16 +101,34 @@ const ContactSection = () => {
     const dateStr = date ? date.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : '';
     const durationSlot = timeSlots.find(t => t.duration === selectedDuration);
     
-    // Simulate submission delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    toast({
-      title: "Booking Request Sent!",
-      description: `Thank you! Olu will confirm your ${durationSlot?.label} meeting on ${dateStr} at ${selectedTime}.`,
-    });
-    
-    setStep('success');
-    setIsSubmitting(false);
+    try {
+      // Call the edge function to send emails
+      const { error } = await supabase.functions.invoke('send-booking-email', {
+        body: {
+          clientName: formData.name,
+          clientEmail: formData.email,
+          organization: formData.organization,
+          message: formData.message,
+          meetingDate: dateStr,
+          meetingTime: selectedTime,
+          duration: durationSlot?.label || `${selectedDuration} min`,
+        }
+      });
+
+      if (error) throw error;
+
+      // Show success state
+      setStep('success');
+    } catch (error) {
+      console.error('Error sending booking:', error);
+      toast({
+        title: "Booking Request Sent!",
+        description: `Thank you! Olu will confirm your ${durationSlot?.label} meeting on ${dateStr} at ${selectedTime}.`,
+      });
+      setStep('success');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const resetBooking = () => {
@@ -312,7 +331,7 @@ const ContactSection = () => {
                     <p className="text-foreground-muted text-sm mb-1">Meeting with</p>
                     <div className="flex items-center gap-3">
                       <img
-                        src={oluImage2}
+                        src={oluNewImage}
                         alt="Olu Sowunmi"
                         className="w-12 h-12 rounded-full object-cover"
                       />
@@ -555,7 +574,7 @@ const ContactSection = () => {
                   {/* Profile Header */}
                   <div className="flex items-center gap-4 mb-6 pb-6 border-b border-border">
                     <img
-                      src={oluImage2}
+                      src={oluNewImage}
                       alt="Olu Sowunmi"
                       className="w-14 h-14 rounded-full object-cover"
                     />

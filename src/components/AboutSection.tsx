@@ -1,9 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import oluImage1 from "@/assets/olu-1.jpg";
-import oluImage2 from "@/assets/olu-2.jpg";
-import oluImage3 from "@/assets/olu-3.jpg";
+import oluNewImage from "@/assets/olu-new.jpg";
 
 const AboutSection = () => {
   const ref = useRef(null);
@@ -13,7 +11,7 @@ const AboutSection = () => {
     <section id="about" className="section-padding bg-background relative overflow-hidden">
       <div className="container mx-auto max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {/* Image Grid */}
+          {/* Image */}
           <motion.div
             ref={ref}
             initial={{ opacity: 0, x: -50 }}
@@ -21,31 +19,12 @@ const AboutSection = () => {
             transition={{ duration: 0.7 }}
             className="relative"
           >
-            <div className="grid grid-cols-2 gap-4">
-              {/* Large image on the left */}
-              <div className="row-span-2">
-                <img
-                  src={oluImage1}
-                  alt="Olu Sowunmi speaking"
-                  className="w-full h-full object-cover rounded-lg"
-                  style={{ minHeight: "400px" }}
-                />
-              </div>
-              {/* Two smaller images stacked on the right */}
-              <div>
-                <img
-                  src={oluImage2}
-                  alt="Olu Sowunmi with team"
-                  className="w-full h-48 object-cover rounded-lg"
-                />
-              </div>
-              <div>
-                <img
-                  src={oluImage3}
-                  alt="Olu Sowunmi at event"
-                  className="w-full h-48 object-cover rounded-lg"
-                />
-              </div>
+            <div className="relative">
+              <img
+                src={oluNewImage}
+                alt="Olu Sowunmi"
+                className="w-full h-auto max-h-[600px] object-cover rounded-lg"
+              />
             </div>
 
             {/* Floating Accents */}
@@ -71,19 +50,20 @@ const AboutSection = () => {
                 intentions to real outcomes.
               </p>
               <p>
-                Olu started his career in technology and consulting, working with organisations 
-                such as IBM and later JPMorganChase. At JPMorganChase he led global recruiting 
-                strategy, relationship management and inclusion focused initiatives. He was 
-                instrumental in creating BOLD Connect, an internal community that brought together 
-                Black professionals, allies and senior leaders for mentoring, sponsorship and 
-                career progression.
-              </p>
-              <p className="text-accent-gold italic font-medium border-l-2 border-accent-gold pl-4">
-                "Impact isn't measured by what we build, but by who we build."
+                Olu's core craft is talent strategy—spotting it, growing it, and deploying it on real 
+                problems. From roles across VIPCG, Tribal, G4S, RSG, IBM and JPMorganChase to 
+                building REDtech Africa Consulting, MOMMS and 3PN, he has consistently worked at 
+                the intersection of business strategy and human potential.
               </p>
               <p>
-                Those experiences shaped a simple conviction: People rarely lack talent. They usually 
-                lack systems, support and opportunity. Everything Olu does today flows from that belief.
+                Today, Olu is a trusted trainer and facilitator for organisations that want measurable 
+                change, not just inspiration. His sessions are highly interactive and practical—minimal 
+                theory, maximum tools people can apply immediately.
+              </p>
+              <p>
+                He splits his time across mission-led platforms focused on turning potential into 
+                visible results, blending corporate discipline, entrepreneurial creativity and community 
+                impact. Equally at home in the boardroom, on campus, in government, or in the community.
               </p>
             </div>
 
@@ -103,19 +83,6 @@ const AboutSection = () => {
             </div>
           </motion.div>
         </div>
-
-        {/* Quote Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-20 text-center"
-        >
-          <blockquote className="text-display-md font-display text-foreground max-w-4xl mx-auto">
-            "People rarely lack talent.<br />
-            They usually lack <span className="gradient-text">systems, support and opportunity.</span>"
-          </blockquote>
-        </motion.div>
       </div>
     </section>
   );

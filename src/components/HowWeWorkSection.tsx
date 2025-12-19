@@ -7,9 +7,9 @@ const workAreas = [
     number: "1",
     title: "Strategy & Design",
     items: [
-      "Workforce planning",
-      "Learning program design",
-      "Employer branding"
+      "Talent Strategy",
+      "Learning and Programme Design",
+      "Workforce Planning & DEI Frameworks"
     ],
     color: "orange",
   },
@@ -17,9 +17,9 @@ const workAreas = [
     number: "2",
     title: "Delivery",
     items: [
-      "Executive search",
-      "Training delivery",
-      "Onboarding systems"
+      "Training Delivery",
+      "Executive Search",
+      "Assessment"
     ],
     color: "teal",
   },
@@ -27,9 +27,9 @@ const workAreas = [
     number: "3",
     title: "Speaking",
     items: [
-      "Keynotes & panels",
-      "Leadership retreats",
-      "Conference hosting"
+      "Keynotes and Panels",
+      "Workshop Facilitation & Leadership Retreats",
+      "Podcast Appearances"
     ],
     color: "gold",
   },

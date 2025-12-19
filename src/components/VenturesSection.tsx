@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Globe, Heart, Users, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import racLogo from "@/assets/rac-logo.png";
+import mommsLogo from "@/assets/momms-logo.png";
+import threePnLogo from "@/assets/3pn-logo.png";
 
 const ventures = [
   {
@@ -13,9 +16,22 @@ const ventures = [
       "Last mile talent programmes for graduates",
       "Advisory on skills-based hiring models"
     ],
-    icon: Globe,
+    logo: racLogo,
     color: "orange",
     url: "https://redtechafrica.com",
+  },
+  {
+    name: "MOMMS (Ministry of Medical Missions)",
+    role: "Co-Founder",
+    description: "MOMMS is a mission driven platform that supports healthcare professionals and organisations, with a focus on empowering health, transforming communities and mobilising talent. Through MOMMS, Olu and his co-founder Dr Anne connect healthcare workers to international opportunities.",
+    offerings: [
+      "Connect healthcare workers to international opportunities",
+      "Support faith based and community providers",
+      "Strengthen health systems sustainably"
+    ],
+    logo: mommsLogo,
+    color: "gold",
+    url: "https://momms.co.uk",
   },
   {
     name: "3PN",
@@ -26,22 +42,9 @@ const ventures = [
       "Build personal brands and networks",
       "Navigate career transitions and entrepreneurship"
     ],
-    icon: Users,
+    logo: threePnLogo,
     color: "teal",
     url: null,
-  },
-  {
-    name: "MOMMS (Ministry of Medical Missions)",
-    role: "Co-Founder",
-    description: "MOMMS is a mission driven platform that supports healthcare professionals and organisations, with a focus on empowering health, transforming communities and mobilising talent. Through MOMMS, Olu and his Co-Founder Dr Anne connect healthcare workers to international opportunities.",
-    offerings: [
-      "Connect healthcare workers to international opportunities",
-      "Support faith based and community providers",
-      "Strengthen health systems sustainably"
-    ],
-    icon: Heart,
-    color: "gold",
-    url: "https://momms.co.uk",
   },
 ];
 
@@ -54,13 +57,6 @@ const VentureCard = ({
 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const Icon = venture.icon;
-
-  const iconColorClass = {
-    orange: "bg-accent-orange",
-    teal: "bg-accent-teal",
-    gold: "bg-accent-gold",
-  }[venture.color];
 
   const CardWrapper = venture.url ? 'a' : 'div';
   const cardProps = venture.url ? { href: venture.url, target: "_blank", rel: "noopener noreferrer" } : {};
@@ -76,8 +72,8 @@ const VentureCard = ({
         {...cardProps}
         className="gradient-border card-hover p-8 bg-card group cursor-pointer block h-full"
       >
-        <div className={`w-16 h-16 rounded-full ${iconColorClass} flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6`}>
-          <Icon className="w-8 h-8 text-background" />
+        <div className="w-16 h-16 rounded-full bg-background-secondary flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110 overflow-hidden">
+          <img src={venture.logo} alt={venture.name} className="w-12 h-12 object-contain" />
         </div>
 
         <h3 className="text-display-sm font-display text-foreground mb-2">
@@ -146,31 +142,41 @@ const VenturesSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto"
+          className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto"
         >
           <a 
             href="https://chandossignatures.com" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="gradient-border p-6 bg-card group cursor-pointer flex items-center justify-between hover:scale-[1.02] transition-transform"
+            className="gradient-border p-6 bg-card group cursor-pointer hover:scale-[1.02] transition-transform"
           >
-            <div>
-              <h4 className="font-display font-semibold text-foreground">Chandos</h4>
-              <p className="text-sm text-foreground-muted">Real Estate & Development</p>
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h4 className="font-display font-semibold text-foreground text-lg">Chandos</h4>
+                <p className="text-sm text-accent-teal">Luxury Fragrance</p>
+              </div>
+              <ArrowRight className="w-5 h-5 text-accent-orange group-hover:translate-x-1 transition-transform" />
             </div>
-            <ArrowRight className="w-5 h-5 text-accent-orange group-hover:translate-x-1 transition-transform" />
+            <p className="text-sm text-foreground-muted">
+              Opulence by Chandos is the epitome of refined sophistication. A fragrance that speaks to your strength, elegance, and individuality, this Eau De Parfum combines the warmth of saffron and cedarwood with the deep richness of oud and rose. Its complex layers unfold from bold top notes to a lingering smoky base, creating an unforgettable scent experience. Whether you wear it day or night, Opulence is more than just a perfume; it's a statement of luxury and quiet strength.
+            </p>
           </a>
           <a 
             href="https://stratumgp.com" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="gradient-border p-6 bg-card group cursor-pointer flex items-center justify-between hover:scale-[1.02] transition-transform"
+            className="gradient-border p-6 bg-card group cursor-pointer hover:scale-[1.02] transition-transform"
           >
-            <div>
-              <h4 className="font-display font-semibold text-foreground">Stratum GP</h4>
-              <p className="text-sm text-foreground-muted">Investment Partnership</p>
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h4 className="font-display font-semibold text-foreground text-lg">Stratum Growth Partners</h4>
+                <p className="text-sm text-accent-teal">Strategic Investment</p>
+              </div>
+              <ArrowRight className="w-5 h-5 text-accent-orange group-hover:translate-x-1 transition-transform" />
             </div>
-            <ArrowRight className="w-5 h-5 text-accent-orange group-hover:translate-x-1 transition-transform" />
+            <p className="text-sm text-foreground-muted">
+              Empowering Growth Through Strategic Investment. Stratum Growth Partners specialises in discovering, investing in, and empowering high-potential ventures to drive sustainable growth and exceptional returns. A Financial Advisory Investment company of West African origin that provides growth capital and strategic support to high-potential businesses. Our name "Stratum" represents the geological term for layered rock formations, symbolising how we build value incrementally, provide structural stability, and foster collaborative partnerships.
+            </p>
           </a>
         </motion.div>
 
@@ -182,7 +188,7 @@ const VenturesSection = () => {
           className="text-center text-foreground-muted mt-12 max-w-3xl mx-auto"
         >
           Beyond these core platforms, Olu also advises and invests in ventures across education, 
-          property, impact and consumer brands—always with an eye on sustainability and shared value.
+          property, impact and consumer brands, always with an eye on sustainability and shared value.
         </motion.p>
       </div>
     </section>

@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import logoWhite from "@/assets/logo-white.png";
 import { Mail, Linkedin, Twitter, ArrowUp } from "lucide-react";
 
@@ -13,7 +12,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="md:col-span-2">
-            <img src={logoWhite} alt="Olu Sowunmi" className="h-14 w-auto mb-6" />
+            <img src={logoWhite} alt="Olu Sowunmi" className="h-20 w-auto mb-6" />
             <p className="text-foreground-muted text-body max-w-md mb-6">
               Builder of people and platforms. Helping organisations, professionals 
               and communities move from good intentions to real outcomes.

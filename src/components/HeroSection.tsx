@@ -66,26 +66,26 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.2 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex flex-col gap-4 justify-center items-center"
         >
-          <a href="#ventures" className="btn-gradient">
+          <a href="#ventures" className="btn-gradient w-full sm:w-auto">
             <span>Explore Ventures</span>
           </a>
           <a
             href="#contact"
-            className="px-8 py-4 rounded-md border border-accent-teal text-accent-teal font-display font-semibold transition-all duration-300 hover:bg-accent-teal hover:text-background"
+            className="px-8 py-4 rounded-md border border-accent-teal text-accent-teal font-display font-semibold transition-all duration-300 hover:bg-accent-teal hover:text-background w-full sm:w-auto text-center"
           >
             Let's Talk
           </a>
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator - hidden on mobile to avoid overlap */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block"
       >
         <div className="flex flex-col items-center gap-2 text-accent-orange bounce-arrow">
           <span className="label-text text-accent-orange">Scroll to Explore</span>

@@ -50,15 +50,15 @@ const AboutSection = () => {
                 intentions to real outcomes.
               </p>
               <p>
-                Olu's core craft is talent strategy—spotting it, growing it, and deploying it on real 
+                Olu's core craft is talent strategy: spotting it, growing it, and deploying it on real 
                 problems. From roles across VIPCG, Tribal, G4S, RSG, IBM and JPMorganChase to 
                 building REDtech Africa Consulting, MOMMS and 3PN, he has consistently worked at 
                 the intersection of business strategy and human potential.
               </p>
               <p>
                 Today, Olu is a trusted trainer and facilitator for organisations that want measurable 
-                change, not just inspiration. His sessions are highly interactive and practical—minimal 
-                theory, maximum tools people can apply immediately.
+                change, not just inspiration. His sessions are highly interactive and practical, with minimal 
+                theory and maximum tools people can apply immediately.
               </p>
               <p>
                 He splits his time across mission-led platforms focused on turning potential into 

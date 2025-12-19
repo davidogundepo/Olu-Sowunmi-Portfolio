@@ -1,12 +1,14 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Send, ChevronLeft, ChevronRight, Clock, Check, Calendar as CalendarIcon, CheckCircle2 } from "lucide-react";
+import { Send, ChevronLeft, ChevronRight, Clock, Check, Calendar as CalendarIcon } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import oluNewImage from "@/assets/olu-new.jpg";
+import logoWhite from "@/assets/logo-white.png";
 
 const timeSlots = [
+  { duration: 15, label: "15 min", description: "Quick intro call" },
   { duration: 45, label: "45 min", description: "Discovery session" },
   { duration: 60, label: "1 hour", description: "Deep dive consultation" },
 ];
@@ -35,7 +37,6 @@ const ContactSection = () => {
     message: "",
   });
 
-  // Generate calendar data - start from current month
   const [currentMonth, setCurrentMonth] = useState(new Date());
   
   const getDaysInMonth = (date: Date) => {
@@ -46,18 +47,25 @@ const ContactSection = () => {
     return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
   };
 
-  // Check if a day is Tuesday (2) or Thursday (4)
-  const isTuesdayOrThursday = (day: number) => {
+  // Check if a day is Mon-Thu (1-4) and not weekend (0, 5, 6)
+  const isAvailableDay = (day: number) => {
     const checkDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
     const dayOfWeek = checkDate.getDay();
-    // Also ensure it's not in the past
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return (dayOfWeek === 2 || dayOfWeek === 4) && checkDate >= today;
+    // Mon=1, Tue=2, Wed=3, Thu=4 are available
+    return (dayOfWeek >= 1 && dayOfWeek <= 4) && checkDate >= today;
+  };
+
+  // Check if weekend (Fri-Sun)
+  const isWeekend = (day: number) => {
+    const checkDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+    const dayOfWeek = checkDate.getDay();
+    return dayOfWeek === 0 || dayOfWeek === 5 || dayOfWeek === 6;
   };
 
   const handleDateSelect = (day: number) => {
-    if (isTuesdayOrThursday(day)) {
+    if (isAvailableDay(day)) {
       setDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day));
       setStep('duration');
     }
@@ -102,22 +110,19 @@ const ContactSection = () => {
     const durationSlot = timeSlots.find(t => t.duration === selectedDuration);
     
     try {
-      // Call the edge function to send emails
       const { error } = await supabase.functions.invoke('send-booking-email', {
         body: {
           clientName: formData.name,
           clientEmail: formData.email,
-          organization: formData.organization,
-          message: formData.message,
-          meetingDate: dateStr,
-          meetingTime: selectedTime,
+          organization: formData.organization || 'Not specified',
+          message: formData.message || 'No message provided',
+          meetingDate: dateStr || 'Not specified',
+          meetingTime: selectedTime || 'Not specified',
           duration: durationSlot?.label || `${selectedDuration} min`,
         }
       });
 
       if (error) throw error;
-
-      // Show success state
       setStep('success');
     } catch (error) {
       console.error('Error sending booking:', error);
@@ -145,7 +150,6 @@ const ContactSection = () => {
     const days = [];
     const dayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
     
-    // Previous month days
     const prevMonthDays = getDaysInMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
     for (let i = firstDay - 1; i >= 0; i--) {
       days.push(
@@ -155,9 +159,9 @@ const ContactSection = () => {
       );
     }
     
-    // Current month days
     for (let day = 1; day <= daysInMonth; day++) {
-      const available = isTuesdayOrThursday(day);
+      const available = isAvailableDay(day);
+      const weekend = isWeekend(day);
       const isSelected = date?.getDate() === day && date?.getMonth() === currentMonth.getMonth();
       
       days.push(
@@ -174,7 +178,9 @@ const ContactSection = () => {
               ? isSelected 
                 ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/30' 
                 : 'bg-primary/20 text-foreground hover:bg-primary/40 cursor-pointer'
-              : 'text-foreground-muted/40 cursor-not-allowed'}
+              : weekend
+                ? 'text-foreground-muted/20 cursor-not-allowed bg-muted/30'
+                : 'text-foreground-muted/40 cursor-not-allowed'}
           `}
         >
           {day}
@@ -182,7 +188,6 @@ const ContactSection = () => {
       );
     }
     
-    // Next month days
     const remainingDays = 42 - days.length;
     for (let i = 1; i <= remainingDays; i++) {
       days.push(
@@ -194,7 +199,6 @@ const ContactSection = () => {
 
     return (
       <div className="w-full">
-        {/* Month Navigation */}
         <div className="flex items-center justify-between mb-6">
           <motion.button
             type="button"
@@ -206,7 +210,7 @@ const ContactSection = () => {
             <ChevronLeft className="w-5 h-5 text-foreground" />
           </motion.button>
           <h3 className="text-xl sm:text-2xl font-display font-semibold text-foreground">
-            {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+            {currentMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
           </h3>
           <motion.button
             type="button"
@@ -219,13 +223,12 @@ const ContactSection = () => {
           </motion.button>
         </div>
 
-        {/* Day Names - highlight Tu and Th */}
         <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2">
-          {dayNames.map(day => (
+          {dayNames.map((day, idx) => (
             <div 
               key={day} 
               className={`w-12 h-10 sm:w-14 flex items-center justify-center font-semibold text-sm sm:text-base
-                ${(day === 'Tu' || day === 'Th') ? 'text-primary' : 'text-foreground-muted'}
+                ${(idx >= 1 && idx <= 4) ? 'text-primary' : 'text-foreground-muted/40'}
               `}
             >
               {day}
@@ -233,15 +236,8 @@ const ContactSection = () => {
           ))}
         </div>
 
-        {/* Days Grid */}
         <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {days}
-        </div>
-
-        {/* Legend */}
-        <div className="mt-4 flex items-center justify-center gap-2 text-sm text-foreground-muted">
-          <div className="w-4 h-4 rounded bg-primary/20" />
-          <span>Available (Tuesdays & Thursdays only)</span>
         </div>
       </div>
     );
@@ -249,7 +245,6 @@ const ContactSection = () => {
 
   return (
     <section id="contact" className="section-padding bg-background-secondary relative overflow-hidden">
-      {/* Background Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-primary/5 blur-3xl" />
       <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-secondary/5 blur-3xl" />
 
@@ -280,9 +275,7 @@ const ContactSection = () => {
               transition={{ duration: 0.5 }}
               className="max-w-2xl mx-auto"
             >
-              {/* Success Card */}
               <div className="relative rounded-2xl overflow-hidden">
-                {/* Header with gradient */}
                 <div className="bg-gradient-to-br from-primary via-primary/80 to-secondary p-8 sm:p-12 text-center">
                   <motion.div
                     initial={{ scale: 0 }}
@@ -320,7 +313,6 @@ const ContactSection = () => {
                   </motion.p>
                 </div>
 
-                {/* Details Card */}
                 <div className="bg-card p-8">
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -328,7 +320,7 @@ const ContactSection = () => {
                     transition={{ delay: 0.5 }}
                     className="border-l-4 border-primary pl-4 mb-6"
                   >
-                    <p className="text-foreground-muted text-sm mb-1">Meeting with</p>
+                    <p className="text-foreground-muted text-sm mb-1">15 Minute Intro</p>
                     <div className="flex items-center gap-3">
                       <img
                         src={oluNewImage}
@@ -337,7 +329,7 @@ const ContactSection = () => {
                       />
                       <div>
                         <h4 className="font-display font-semibold text-foreground text-lg">Olu Sowunmi</h4>
-                        <p className="text-foreground-muted text-sm">{formData.organization || 'Consultant'}</p>
+                        <p className="text-foreground-muted text-sm">GMT (London)</p>
                       </div>
                     </div>
                   </motion.div>
@@ -357,7 +349,7 @@ const ContactSection = () => {
                     <div className="flex items-center gap-4 text-foreground">
                       <Clock className="w-5 h-5 text-primary" />
                       <span className="font-medium">
-                        {selectedTime} - {selectedDuration} minutes
+                        {selectedTime} - {selectedDuration} minutes (GMT)
                       </span>
                     </div>
                   </motion.div>
@@ -389,6 +381,20 @@ const ContactSection = () => {
               {/* Calendar Section */}
               <div className="relative rounded-2xl p-[2px] bg-gradient-to-br from-primary via-primary/50 to-secondary">
                 <div className="bg-card rounded-2xl p-6 sm:p-8 min-h-[500px]">
+                  {/* Meeting Intro Header */}
+                  <div className="flex items-center gap-4 mb-6 pb-6 border-b border-border">
+                    <img
+                      src={oluNewImage}
+                      alt="Olu Sowunmi"
+                      className="w-14 h-14 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="text-sm text-foreground-muted">15 Minute Intro</p>
+                      <h3 className="font-display font-semibold text-foreground">Olu Sowunmi</h3>
+                      <p className="text-xs text-foreground-muted">GMT (London)</p>
+                    </div>
+                  </div>
+
                   <AnimatePresence mode="wait">
                     {step === 'date' && (
                       <motion.div
@@ -442,10 +448,7 @@ const ContactSection = () => {
                               whileHover={{ scale: 1.02, x: 8 }}
                               whileTap={{ scale: 0.98 }}
                               onClick={() => handleDurationSelect(slot.duration)}
-                              className={`
-                                w-full p-5 rounded-xl border-2 border-border bg-muted/50 hover:border-primary hover:bg-primary/10
-                                flex items-center gap-4 transition-all duration-200 group
-                              `}
+                              className="w-full p-5 rounded-xl border-2 border-border bg-muted/50 hover:border-primary hover:bg-primary/10 flex items-center gap-4 transition-all duration-200 group"
                             >
                               <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center group-hover:bg-primary/30 transition-colors">
                                 <Clock className="w-6 h-6 text-primary" />
@@ -491,7 +494,7 @@ const ContactSection = () => {
                         </div>
 
                         <h4 className="text-xl font-display font-semibold text-foreground mb-6 text-center">
-                          Select Time
+                          Select Time (GMT)
                         </h4>
 
                         <div className="grid grid-cols-2 gap-3">
@@ -554,7 +557,7 @@ const ContactSection = () => {
                           <div className="flex items-center justify-center gap-3">
                             <Clock className="w-5 h-5 text-primary" />
                             <span className="text-foreground font-medium">
-                              {selectedTime} • {selectedDuration} minutes
+                              {selectedTime} • {selectedDuration} minutes (GMT)
                             </span>
                           </div>
                         </div>
@@ -571,16 +574,15 @@ const ContactSection = () => {
               {/* Form Section */}
               <div className="relative rounded-2xl p-[2px] bg-gradient-to-br from-secondary via-secondary/50 to-primary">
                 <div className="bg-card rounded-2xl p-6 sm:p-8 h-full">
-                  {/* Profile Header */}
+                  {/* Profile Header with Logo */}
                   <div className="flex items-center gap-4 mb-6 pb-6 border-b border-border">
                     <img
-                      src={oluNewImage}
+                      src={logoWhite}
                       alt="Olu Sowunmi"
-                      className="w-14 h-14 rounded-full object-cover"
+                      className="w-14 h-14 object-contain"
                     />
                     <div>
                       <h3 className="font-display font-semibold text-foreground">Olu Sowunmi</h3>
-                      <p className="text-sm text-foreground-muted">Usually responds within 24 hours</p>
                     </div>
                   </div>
 
@@ -615,7 +617,7 @@ const ContactSection = () => {
 
                     <div>
                       <label className="label-text text-foreground-muted mb-2 block text-xs uppercase tracking-wider">
-                        Organization
+                        Organisation
                       </label>
                       <input
                         type="text"

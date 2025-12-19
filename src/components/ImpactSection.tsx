@@ -4,9 +4,9 @@ import { useRef, useEffect, useState } from "react";
 import { Users, Building, Globe, Briefcase } from "lucide-react";
 
 const metrics = [
-  { value: 5000, suffix: "+", label: "Talents Trained", icon: Users },
-  { value: 200, suffix: "+", label: "Global Placements", icon: Building },
-  { value: 15, suffix: "", label: "Countries Reached", icon: Globe },
+  { value: 200, suffix: "+", label: "Talents Trained", icon: Users },
+  { value: 5000, suffix: "+", label: "Global Placements", icon: Building },
+  { value: 5, suffix: "", label: "Continents", icon: Globe },
   { value: 6, suffix: "", label: "Active Ventures", icon: Briefcase },
 ];
 

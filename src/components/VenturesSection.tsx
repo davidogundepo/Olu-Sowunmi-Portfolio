@@ -175,21 +175,11 @@ const VenturesSection = () => {
               <ArrowRight className="w-5 h-5 text-accent-orange group-hover:translate-x-1 transition-transform" />
             </div>
             <p className="text-sm text-foreground-muted">
-              Empowering Growth Through Strategic Investment. Stratum Growth Partners specialises in discovering, investing in, and empowering high-potential ventures to drive sustainable growth and exceptional returns. A Financial Advisory Investment company of West African origin that provides growth capital and strategic support to high-potential businesses. Our name "Stratum" represents the geological term for layered rock formations, symbolising how we build value incrementally, provide structural stability, and foster collaborative partnerships.
+              Stratum Growth Partners specialises in discovering, investing in, and empowering high-potential ventures to drive sustainable growth and exceptional returns. A Financial Advisory Investment company of West African origin that provides growth capital and strategic support to high-potential businesses. Our name "Stratum" represents the geological term for layered rock formations, symbolising how we build value incrementally, provide structural stability, and foster collaborative partnerships.
             </p>
           </a>
         </motion.div>
 
-        {/* Additional note */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-center text-foreground-muted mt-12 max-w-3xl mx-auto"
-        >
-          Beyond these core platforms, Olu also advises and invests in ventures across education, 
-          property, impact and consumer brands, always with an eye on sustainability and shared value.
-        </motion.p>
       </div>
     </section>
   );

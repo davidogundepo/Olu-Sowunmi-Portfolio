@@ -6,22 +6,22 @@ import { Building2, GraduationCap, Heart, Landmark } from "lucide-react";
 const audiences = [
   {
     icon: Landmark,
-    title: "Government or Development Partner",
+    title: "Government & Development Organisations",
     color: "orange",
   },
   {
     icon: Building2,
-    title: "Corporate or Financial Institution",
+    title: "Corporate Organisations",
     color: "teal",
   },
   {
     icon: GraduationCap,
-    title: "University, Polytechnics or Learning Institution",
+    title: "Learning Institution",
     color: "gold",
   },
   {
     icon: Heart,
-    title: "Healthcare Organisation",
+    title: "Healthcare Providers",
     color: "orange",
   },
 ];

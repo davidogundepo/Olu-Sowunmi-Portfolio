@@ -6,13 +6,58 @@
 
 @layer base {
   :root {
-    /* Olu Sowunmi Brand Colors - Accessibility Improved */
+    /* Light Mode - Elegant & Professional */
+    --background: 0 0% 100%;
+    --background-secondary: 210 20% 98%;
+    --foreground: 222 47% 11%;
+    --foreground-muted: 215 16% 47%;
+    
+    /* Brand Accents - Same across themes for consistency */
+    --accent-orange: 16 100% 50%;
+    --accent-teal: 200 85% 40%;
+    --accent-gold: 40 90% 45%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 16 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 40 90% 45%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 20% 88%;
+    --input: 214 20% 88%;
+    --ring: 16 100% 50%;
+
+    --radius: 0.75rem;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--accent-orange)) 0%, hsl(var(--accent-teal)) 100%);
+    --gradient-glow: 0 0 60px hsl(var(--accent-orange) / 0.2);
+    --gradient-teal-glow: 0 0 60px hsl(var(--accent-teal) / 0.2);
+  }
+
+  .dark {
+    /* Dark Mode - Original Olu Sowunmi Brand Colors */
     --background: 220 25% 10%;
     --background-secondary: 220 20% 15%;
     --foreground: 210 20% 95%;
     --foreground-muted: 210 15% 70%;
     
-    /* Brand Accents - Color-blind friendly (higher contrast, distinguishable) */
+    /* Brand Accents */
     --accent-orange: 25 95% 55%;
     --accent-teal: 200 85% 45%;
     --accent-gold: 40 90% 50%;
@@ -41,8 +86,6 @@
     --border: 228 20% 20%;
     --input: 228 20% 20%;
     --ring: 16 100% 60%;
-
-    --radius: 0.75rem;
 
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--accent-orange)) 0%, hsl(var(--accent-teal)) 100%);

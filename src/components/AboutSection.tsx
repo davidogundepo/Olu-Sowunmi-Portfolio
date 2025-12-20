@@ -63,7 +63,7 @@ const AboutSection = () => {
               <p>
                 He splits his time across mission-led platforms focused on turning potential into 
                 visible results, blending corporate discipline, entrepreneurial creativity and community 
-                impact. Equally at home in the boardroom, on campus, in government, or in the community.
+                impact.
               </p>
             </div>
 

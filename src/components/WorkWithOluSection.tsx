@@ -16,7 +16,7 @@ const audiences = [
   },
   {
     icon: GraduationCap,
-    title: "Learning Institution",
+    title: "Learning Institutions",
     color: "gold",
   },
   {

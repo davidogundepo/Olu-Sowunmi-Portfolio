@@ -9,8 +9,8 @@ import logoWhite from "@/assets/logo-white.png";
 
 const timeSlots = [
   { duration: 15, label: "15 min", description: "Quick intro call" },
-  { duration: 45, label: "45 min", description: "Discovery session" },
-  { duration: 60, label: "1 hour", description: "Deep dive consultation" },
+  // { duration: 45, label: "45 min", description: "Discovery session" },
+  // { duration: 60, label: "1 hour", description: "Deep dive consultation" },
 ];
 
 const availableTimes = [
@@ -110,19 +110,21 @@ const ContactSection = () => {
     const durationSlot = timeSlots.find(t => t.duration === selectedDuration);
     
     try {
-      const { error } = await supabase.functions.invoke('send-booking-email', {
-        body: {
-          clientName: formData.name,
-          clientEmail: formData.email,
-          organization: formData.organization || 'Not specified',
-          message: formData.message || 'No message provided',
-          meetingDate: dateStr || 'Not specified',
-          meetingTime: selectedTime || 'Not specified',
-          duration: durationSlot?.label || `${selectedDuration} min`,
-        }
-      });
+      if (supabase) {
+        const { error } = await supabase.functions.invoke('send-booking-email', {
+          body: {
+            clientName: formData.name,
+            clientEmail: formData.email,
+            organization: formData.organization || 'Not specified',
+            message: formData.message || 'No message provided',
+            meetingDate: dateStr || 'Not specified',
+            meetingTime: selectedTime || 'Not specified',
+            duration: durationSlot?.label || `${selectedDuration} min`,
+          }
+        });
 
-      if (error) throw error;
+        if (error) throw error;
+      }
       setStep('success');
     } catch (error) {
       console.error('Error sending booking:', error);
@@ -153,7 +155,7 @@ const ContactSection = () => {
     const prevMonthDays = getDaysInMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
     for (let i = firstDay - 1; i >= 0; i--) {
       days.push(
-        <div key={`prev-${i}`} className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-foreground-muted/30 text-lg">
+        <div key={`prev-${i}`} className="aspect-square flex items-center justify-center text-foreground-muted/30 text-sm sm:text-lg">
           {prevMonthDays - i}
         </div>
       );
@@ -173,7 +175,7 @@ const ContactSection = () => {
           onClick={() => handleDateSelect(day)}
           disabled={!available}
           className={`
-            w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center text-lg font-semibold transition-all duration-200
+            aspect-square rounded-lg flex items-center justify-center text-sm sm:text-lg font-semibold transition-all duration-200
             ${available 
               ? isSelected 
                 ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/30' 
@@ -191,7 +193,7 @@ const ContactSection = () => {
     const remainingDays = 42 - days.length;
     for (let i = 1; i <= remainingDays; i++) {
       days.push(
-        <div key={`next-${i}`} className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-foreground-muted/30 text-lg">
+        <div key={`next-${i}`} className="aspect-square flex items-center justify-center text-foreground-muted/30 text-sm sm:text-lg">
           {i}
         </div>
       );
@@ -199,17 +201,17 @@ const ContactSection = () => {
 
     return (
       <div className="w-full">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
           <motion.button
             type="button"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={prevMonth}
-            className="w-10 h-10 rounded-lg bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors"
           >
-            <ChevronLeft className="w-5 h-5 text-foreground" />
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
           </motion.button>
-          <h3 className="text-xl sm:text-2xl font-display font-semibold text-foreground">
+          <h3 className="text-lg sm:text-2xl font-display font-semibold text-foreground">
             {currentMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
           </h3>
           <motion.button
@@ -217,17 +219,17 @@ const ContactSection = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={nextMonth}
-            className="w-10 h-10 rounded-lg bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors"
           >
-            <ChevronRight className="w-5 h-5 text-foreground" />
+            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
           </motion.button>
         </div>
 
-        <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2">
+        <div className="grid grid-cols-7 gap-1 mb-1 sm:mb-2">
           {dayNames.map((day, idx) => (
             <div 
               key={day} 
-              className={`w-12 h-10 sm:w-14 flex items-center justify-center font-semibold text-sm sm:text-base
+              className={`aspect-square flex items-center justify-center font-semibold text-xs sm:text-sm
                 ${(idx >= 1 && idx <= 4) ? 'text-primary' : 'text-foreground-muted/40'}
               `}
             >
@@ -236,7 +238,7 @@ const ContactSection = () => {
           ))}
         </div>
 
-        <div className="grid grid-cols-7 gap-1 sm:gap-2">
+        <div className="grid grid-cols-7 gap-1">
           {days}
         </div>
       </div>
@@ -275,62 +277,63 @@ const ContactSection = () => {
               transition={{ duration: 0.5 }}
               className="max-w-2xl mx-auto"
             >
-              <div className="relative rounded-2xl overflow-hidden">
-                <div className="bg-gradient-to-br from-primary via-primary/80 to-secondary p-8 sm:p-12 text-center">
+              <div className="relative rounded-2xl overflow-hidden bg-card border border-border">
+                {/* Full Cover Success Icon Area */}
+                <div className="bg-gradient-to-br from-primary via-primary/90 to-secondary p-12 sm:p-16 text-center flex flex-col items-center justify-center min-h-[400px]">
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                    className="w-24 h-24 rounded-full bg-background/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-6"
+                    className="relative mb-8"
                   >
-                    <CalendarIcon className="w-12 h-12 text-background" />
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.5 }}
-                      className="absolute -bottom-1 -right-1 w-10 h-10 rounded-full bg-background flex items-center justify-center"
-                    >
-                      <Check className="w-6 h-6 text-primary" />
-                    </motion.div>
+                    {/* Large success checkmark circle */}
+                    <div className="w-32 h-32 rounded-full bg-background/20 backdrop-blur-sm flex items-center justify-center">
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.4, type: "spring", stiffness: 300 }}
+                        className="w-24 h-24 rounded-full bg-background flex items-center justify-center"
+                      >
+                        <Check className="w-14 h-14 text-primary" strokeWidth={3} />
+                      </motion.div>
+                    </div>
                   </motion.div>
-                  
+
                   <motion.h3
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
                     className="text-3xl sm:text-4xl font-display font-bold text-background mb-4"
                   >
-                    Your meeting is booked!
+                    Booking Confirmed!
                   </motion.h3>
-                  
+
                   <motion.p
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="text-background/90 text-lg"
+                    className="text-background/90 text-lg max-w-md"
                   >
-                    You and Olu will be receiving an invitation email shortly.
+                    You and Olu will receive an invitation email shortly with the meeting details.
                   </motion.p>
                 </div>
 
-                <div className="bg-card p-8">
+                {/* Meeting Details */}
+                <div className="p-8 space-y-6">
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
-                    className="border-l-4 border-primary pl-4 mb-6"
+                    className="flex items-center gap-4"
                   >
-                    <p className="text-foreground-muted text-sm mb-1">15 Minute Intro</p>
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={oluNewImage}
-                        alt="Olu Sowunmi"
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                      <div>
-                        <h4 className="font-display font-semibold text-foreground text-lg">Olu Sowunmi</h4>
-                        <p className="text-foreground-muted text-sm">GMT (London)</p>
-                      </div>
+                    <img
+                      src={oluNewImage}
+                      alt="Olu Sowunmi"
+                      className="w-14 h-14 rounded-full object-cover"
+                    />
+                    <div>
+                      <h4 className="font-display font-semibold text-foreground text-lg">Olu Sowunmi</h4>
+                      <p className="text-foreground-muted text-sm">15 Minute Intro • GMT (London)</p>
                     </div>
                   </motion.div>
 
@@ -338,7 +341,7 @@ const ContactSection = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
-                    className="space-y-4 mb-8"
+                    className="bg-muted/50 rounded-xl p-4 space-y-3"
                   >
                     <div className="flex items-center gap-4 text-foreground">
                       <CalendarIcon className="w-5 h-5 text-primary" />
@@ -349,24 +352,20 @@ const ContactSection = () => {
                     <div className="flex items-center gap-4 text-foreground">
                       <Clock className="w-5 h-5 text-primary" />
                       <span className="font-medium">
-                        {selectedTime} - {selectedDuration} minutes (GMT)
+                        {selectedTime} - {selectedDuration} minutes
                       </span>
                     </div>
                   </motion.div>
 
-                  <motion.div
+                  <motion.button
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.7 }}
-                    className="flex flex-col sm:flex-row gap-4"
+                    onClick={resetBooking}
+                    className="w-full px-6 py-4 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-semibold rounded-lg transition-colors"
                   >
-                    <button
-                      onClick={resetBooking}
-                      className="flex-1 px-6 py-3 bg-muted hover:bg-muted/80 text-foreground font-medium rounded-lg transition-colors"
-                    >
-                      Book Another Meeting
-                    </button>
-                  </motion.div>
+                    Okay
+                  </motion.button>
                 </div>
               </div>
             </motion.div>
@@ -380,7 +379,7 @@ const ContactSection = () => {
             >
               {/* Calendar Section */}
               <div className="relative rounded-2xl p-[2px] bg-gradient-to-br from-primary via-primary/50 to-secondary">
-                <div className="bg-card rounded-2xl p-6 sm:p-8 min-h-[500px]">
+                <div className="bg-card rounded-2xl p-4 sm:p-6 md:p-8 min-h-[500px]">
                   {/* Meeting Intro Header */}
                   <div className="flex items-center gap-4 mb-6 pb-6 border-b border-border">
                     <img
@@ -573,17 +572,22 @@ const ContactSection = () => {
 
               {/* Form Section */}
               <div className="relative rounded-2xl p-[2px] bg-gradient-to-br from-secondary via-secondary/50 to-primary">
-                <div className="bg-card rounded-2xl p-6 sm:p-8 h-full">
-                  {/* Profile Header with Logo */}
-                  <div className="flex items-center gap-4 mb-6 pb-6 border-b border-border">
-                    <img
-                      src={logoWhite}
-                      alt="Olu Sowunmi"
-                      className="w-14 h-14 object-contain"
-                    />
-                    <div>
-                      <h3 className="font-display font-semibold text-foreground">Olu Sowunmi</h3>
+                <div className="bg-card rounded-2xl p-4 sm:p-6 md:p-8 h-full">
+                  {/* Profile Header with Logo and Message */}
+                  <div className="mb-6 pb-6 border-b border-border">
+                    <div className="flex items-center gap-4 mb-4">
+                      <img
+                        src={oluNewImage}
+                        alt="Olu Sowunmi"
+                        className="w-14 h-14 rounded-full object-cover"
+                      />
+                      <div>
+                        <h3 className="font-display font-semibold text-foreground">Olu Sowunmi</h3>
+                      </div>
                     </div>
+                    <p className="text-sm text-foreground-muted">
+                      Please use this link if you're considering working with me for training, strategic resourcing, facilitation and career coaching support.
+                    </p>
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-4">

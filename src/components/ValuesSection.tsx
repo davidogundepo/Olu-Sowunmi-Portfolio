@@ -18,7 +18,7 @@ const values = [
   },
   {
     icon: Users,
-    title: "Partnership Over Ego",
+    title: "Collaborative Leadership",
     description: "True impact comes from collaboration. Real change in Africa and beyond will always require governments, private sector, faith and community leaders to work together.",
     color: "gold",
   },
@@ -35,7 +35,7 @@ const ValuesSection = () => {
   };
 
   return (
-    <section className="section-padding bg-background relative overflow-hidden">
+    <section id="values" className="section-padding bg-background relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-80 h-80 rounded-full bg-accent-gold/5 blur-3xl" />
       <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-accent-orange/5 blur-3xl" />

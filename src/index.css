@@ -165,7 +165,7 @@
   }
 
   .btn-gradient {
-    @apply relative overflow-hidden rounded-md px-8 py-4 font-display font-semibold text-white transition-all duration-300 hover:scale-105;
+    @apply relative overflow-hidden rounded-md px-8 py-4 font-display font-semibold text-primary-foreground transition-all duration-300 hover:scale-105;
     background: var(--gradient-primary);
   }
 

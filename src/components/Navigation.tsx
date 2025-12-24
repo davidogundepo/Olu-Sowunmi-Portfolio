@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import logoWhite from "@/assets/logo-white.png";
@@ -9,7 +9,7 @@ import { useTheme } from "@/hooks/useTheme";
 const navLinks = [
   { label: "About", href: "#about" },
   { label: "Ventures", href: "#ventures" },
-  { label: "Core Values", href: "#values" },
+  { label: "Values", href: "#values" },
 ];
 
 const Navigation = () => {
@@ -23,6 +23,17 @@ const Navigation = () => {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToHash = useCallback((hash: string) => {
+    const id = hash.replace("#", "");
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    // Account for fixed navbar height
+    const navOffset = 96;
+    const y = el.getBoundingClientRect().top + window.scrollY - navOffset;
+    window.scrollTo({ top: y, behavior: "smooth" });
   }, []);
 
   const logo = theme === "dark" ? logoWhite : logoBlack;
@@ -50,6 +61,10 @@ const Navigation = () => {
                 <a
                   key={link.label}
                   href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToHash(link.href);
+                  }}
                   className="text-foreground-muted hover:text-foreground font-medium transition-colors relative group"
                 >
                   {link.label}
@@ -91,7 +106,11 @@ const Navigation = () => {
                 <motion.a
                   key={link.label}
                   href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsMobileMenuOpen(false);
+                    scrollToHash(link.href);
+                  }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}

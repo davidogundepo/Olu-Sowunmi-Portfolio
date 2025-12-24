@@ -10,19 +10,21 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const getTimeBasedTheme = (): Theme => {
-  const hour = new Date().getHours();
-  // Dark mode from 6 PM to 6 AM
-  return hour >= 18 || hour < 6 ? "dark" : "light";
-};
+const DEFAULT_THEME: Theme = "light";
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
-    // Check localStorage first
+    // Migration: force a clean light baseline for existing visitors once
+    const migrated = localStorage.getItem("theme_v2_migrated") === "1";
+    if (!migrated) {
+      localStorage.setItem("theme", "light");
+      localStorage.setItem("theme_v2_migrated", "1");
+      return "light";
+    }
+
     const stored = localStorage.getItem("theme") as Theme | null;
-    if (stored) return stored;
-    // Otherwise use time-based default
-    return getTimeBasedTheme();
+    if (stored === "light" || stored === "dark") return stored;
+    return "light";
   });
 
   useEffect(() => {

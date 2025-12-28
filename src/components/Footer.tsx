@@ -1,6 +1,6 @@
 import logoWhite from "@/assets/logo-white.png";
 import logoBlack from "@/assets/logo-black.png";
-import { Mail, Linkedin, Twitter, ArrowUp } from "lucide-react";
+import { Mail, Linkedin, ArrowUp } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 
 const Footer = () => {
@@ -30,20 +30,12 @@ const Footer = () => {
                 <Mail className="w-4 h-4" />
               </a>
               <a
-                href="https://linkedin.com/in/olusowunmi"
+                href="https://www.linkedin.com/in/olu-sowunmi"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-foreground-muted hover:text-accent-teal hover:border-accent-teal transition-all"
               >
                 <Linkedin className="w-4 h-4" />
-              </a>
-              <a
-                href="https://twitter.com/olusowunmi"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-foreground-muted hover:text-accent-gold hover:border-accent-gold transition-all"
-              >
-                <Twitter className="w-4 h-4" />
               </a>
             </div>
           </div>

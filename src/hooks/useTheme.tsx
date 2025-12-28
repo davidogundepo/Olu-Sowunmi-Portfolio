@@ -10,21 +10,21 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const DEFAULT_THEME: Theme = "light";
+const DEFAULT_THEME: Theme = "dark";
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
-    // Migration: force a clean light baseline for existing visitors once
-    const migrated = localStorage.getItem("theme_v2_migrated") === "1";
+    // Migration: force a clean dark baseline for existing visitors once
+    const migrated = localStorage.getItem("theme_v3_migrated") === "1";
     if (!migrated) {
-      localStorage.setItem("theme", "light");
-      localStorage.setItem("theme_v2_migrated", "1");
-      return "light";
+      localStorage.setItem("theme", "dark");
+      localStorage.setItem("theme_v3_migrated", "1");
+      return "dark";
     }
 
     const stored = localStorage.getItem("theme") as Theme | null;
     if (stored === "light" || stored === "dark") return stored;
-    return "light";
+    return "dark";
   });
 
   useEffect(() => {
